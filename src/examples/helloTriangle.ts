@@ -1,9 +1,9 @@
 import glslangModule from '../glslang';
-
 export const title = 'Hello Triangle';
 export const description = 'Shows rendering a basic triangle.';
 
 export async function init(canvas: HTMLCanvasElement) {
+    console.log("INIT!!");
     const vertexShaderGLSL = `#version 450
       const vec2 pos[3] = vec2[3](vec2(0.0f, 0.5f), vec2(-0.5f, -0.5f), vec2(0.5f, -0.5f));
 
@@ -19,9 +19,16 @@ export async function init(canvas: HTMLCanvasElement) {
           outColor = vec4(1.0, 0.0, 0.0, 1.0);
       }
     `;
-
+    console.log(fragmentShaderGLSL);
     const adapter = await navigator.gpu.requestAdapter();
+    console.log(adapter);
     const device = await adapter.requestDevice();
+    device.lost.then(value => {
+      console.log(value);
+      init(canvas);
+      return;
+    });
+    console.log(device);
     const glslang = await glslangModule();
 
     const context = canvas.getContext('gpupresent');
